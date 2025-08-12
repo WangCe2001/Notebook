@@ -76,7 +76,7 @@ pip install ultralytics
 
 2.使用pycharm中的版本控制来进行
 
-#### 第一步：在 PyCharm 中将你的项目初始化为 Git 仓库
+## 第一步：在 PyCharm 中将你的项目初始化为 Git 仓库
 
 这是告诉 Git：“嘿，请开始管理我这个项目文件夹吧！”
 
@@ -86,7 +86,7 @@ pip install ultralytics
 4. 在弹出的窗口中，从下拉菜单里选择 `Git`，然后点击 `OK`。
 5. **观察变化**：你会发现，项目视图里的所有文件名都变成了**红色**。这表示这些文件已经被 Git "看到"了，但它们还没有被正式地“暂存”或“提交”。
 
-#### 第二步：创建 `.gitignore` 文件并进行首次提交
+## 第二步：创建 `.gitignore` 文件并进行首次提交
 
 在提交代码前，我们必须告诉 Git 哪些文件是**不需要**管理的，比如虚拟环境文件夹 (`venv`)、PyCharm 的配置 (`.idea`)、Python 的缓存 (`__pycache__`) 等。
 
@@ -124,7 +124,7 @@ pip install ultralytics
 
    提交后，你会发现文件名都变回了正常的颜色（通常是白色或黑色），这表示你的代码已经有了一个本地的、安全的版本记录。
 
-#### 第三步：在 GitHub 上创建远程仓库
+## 第三步：在 GitHub 上创建远程仓库
 
 现在，我们需要在 GitHub 网站上为你的项目创建一个“家”。
 
@@ -137,7 +137,7 @@ pip install ultralytics
 3. 点击 `Create repository`。
 4. 创建成功后，页面会跳转到一个显示仓库地址的页面。找到并复制那个 HTTPS 地址，它看起来像这样：`https://github.com/YourUsername/YourProjectName.git`。
 
-#### 第四步：连接本地仓库到远程仓库并推送
+## 第四步：连接本地仓库到远程仓库并推送
 
 这是最后一步，将你本地的“存档”上传到 GitHub。
 
@@ -154,3 +154,48 @@ pip install ultralytics
    - 在 `Push Commits` 窗口中，PyCharm 会显示你要推送的分支（比如 `main -> origin/main`）。确认无误后，点击 `Push`。
    - 如果这是你第一次向这个仓库推送，PyCharm 可能会需要你验证 GitHub 身份，按照提示操作即可。
 6. **验证成功**：推送完成后，回到你在 GitHub 上的项目页面，刷新一下。你会惊喜地发现，你本地项目的所有文件都已经出现在 GitHub 上了！
+
+
+
+# 三.下载PCB瑕疵数据集
+
+下载网址：https://aistudio.baidu.com/datasetdetail/272346
+
+有JSON格式和VOC两种格式
+
+# 四.安装Label-Studio
+
+使用anaconda安装过程：https://github.com/HumanSignal/label-studio
+
+```bash
+conda create --name label-studio
+conda activate label-studio
+conda install psycopg2
+pip install label-studio
+```
+
+安装成功后打开步骤：
+
+## 总结与日常使用建议
+
+- **日常启动流程**：
+
+  1. 打开 Anaconda Prompt 或终端。
+  2. `conda activate label-studio-env` (激活环境)
+  3. `cd /path/to/your/projects` (**建议**：先进入你打算存放标注项目的文件夹)
+  4. `label-studio start` (启动服务)
+
+- **数据存放位置**：在你运行 `label-studio start` 命令的**当前目录下**，Label Studio 会自动创建一个名为 `label_studio.sqlite3` 的数据库文件和一些项目文件夹，用来存储你的所有项目和标注数据。所以，**强烈建议**先用 `cd` 命令进入一个专门的工作目录再启动它，以方便管理。
+
+- **如何更新**：如果未来 Label Studio 发布了新版本，你只需要激活环境后，运行以下命令即可升级：
+
+  Bash
+
+  ```
+  pip install --upgrade label-studio
+  ```
+
+- **机器学习后端**：如果你想使用 Label Studio 强大的机器学习辅助标注功能，你需要在**同一个 `label-studio-env` 环境中**安装相应的库（如 `tensorflow`, `pytorch`）和 `label-studio-ml-backend`。
+
+这个流程可以确保你的 Label Studio 有一个干净、稳定且易于管理的环境。祝你使用愉快！
+
