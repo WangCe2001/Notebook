@@ -181,8 +181,13 @@ pip install label-studio
 - **日常启动流程**：
 
   1. 打开 Anaconda Prompt 或终端。
-  2. `conda activate label-studio-env` (激活环境)
-  3. `cd /path/to/your/projects` (**建议**：先进入你打算存放标注项目的文件夹)
+  2. `conda activate label-studio` (激活环境)
+  3. `cd /path/to/your/projects` (**建议**：先进入你打算存放标注项目的文件夹) 
+
+     ```
+     D：
+     cd D:\09.YOLO\03.pcb_dataset\PCB_DATASET
+     ```
   4. `label-studio start` (启动服务)
 
 - **数据存放位置**：在你运行 `label-studio start` 命令的**当前目录下**，Label Studio 会自动创建一个名为 `label_studio.sqlite3` 的数据库文件和一些项目文件夹，用来存储你的所有项目和标注数据。所以，**强烈建议**先用 `cd` 命令进入一个专门的工作目录再启动它，以方便管理。
@@ -199,3 +204,113 @@ pip install label-studio
 
 这个流程可以确保你的 Label Studio 有一个干净、稳定且易于管理的环境。祝你使用愉快！
 
+
+
+# 五.使用Label-Studio打开图片
+
+## 1.配置本地仓库
+
+如果配置过程中出现了报错，可以问Gemini来解决，解决步骤如下：
+
+### 方法一：永久性解决方案（推荐）
+
+这个方法的原理是：利用Anaconda环境的特性，创建一个脚本。每当您激活这个特定的Conda环境时，脚本会自动设置所需的环境变量。一劳永逸。
+
+**步骤 1：打开Anaconda Prompt并激活环境**
+
+1. 从Windows开始菜单找到并打开 **Anaconda Prompt** (不要使用普通的CMD或PowerShell)。
+
+2. 激活您安装了Label Studio的Conda环境。假设您的环境名叫 `label-studio-env`（请替换成您自己的环境名）。
+
+   Bash
+
+   ```
+   conda activate label-studio
+   ```
+
+**步骤 2：创建环境变量设置脚本**
+
+1. 激活环境后，我们需要在环境的特定文件夹下创建一个批处理文件（`.bat`）。请依次执行以下命令来创建文件夹和文件：
+
+   - 首先，创建 `activate.d` 文件夹（如果它不存在）：
+
+     Bash
+
+     ```
+     mkdir "%CONDA_PREFIX%\etc\conda\activate.d"
+     ```
+
+     *(这里的 `%CONDA_PREFIX%` 是一个会自动指向当前激活环境路径的变量，您无需修改它)*
+
+   - 然后，用记事本创建一个新的批处理文件：
+
+     Bash
+
+     ```
+     notepad "%CONDA_PREFIX%\etc\conda\activate.d\env_vars.bat"
+     ```
+
+2. 在弹出的记事本窗口中，**复制并粘贴**以下内容：
+
+   代码段
+
+   ```
+   @echo off
+   set "LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED=true"
+   set "LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT=D:\09.YOLO"
+   ```
+
+   **请注意**：
+
+   - 第二行代码就是解决您问题的关键。
+   - 第三行是**强烈推荐**的安全设置。请将 `D:\09.YOLO` 修改为您存放所有标注项目数据的**根目录**。这可以防止Label Studio访问到这个文件夹之外的其他文件。如果您的PCB数据就放在 `D:\09.YOLO` 下，那么这个设置就是完美的。
+
+3. 保存记事本文件并关闭。
+
+**步骤 3：创建环境变量清理脚本（好习惯）**
+
+为了保持环境干净，我们再创建一个脚本，在您退出Conda环境时自动清除这些变量。
+
+1. 同样在Anaconda Prompt中，执行以下命令：
+
+   Bash
+
+   ```
+   mkdir "%CONDA_PREFIX%\etc\conda\deactivate.d"
+   notepad "%CONDA_PREFIX%\etc\conda\deactivate.d\env_vars.bat"
+   ```
+
+2. 在弹出的记事本中，粘贴以下内容来“取消”设置：
+
+   代码段
+
+   ```
+   @echo off
+   set "LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED="
+   set "LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT="
+   ```
+
+3. 保存并关闭记事本。
+
+**步骤 4：验证并启动**
+
+1. 现在，设置已经完成！为了让它生效，请先退出当前环境，再重新激活。
+
+   Bash
+
+   ```
+   conda deactivate
+   conda activate label-studio
+   ```
+
+2. 当您重新激活时，脚本会自动运行。现在您可以直接启动Label Studio了：
+
+   Bash
+
+   ```
+   label-studio start
+   ```
+
+现在，回到Label Studio的网页界面，再次添加本地存储 `D:\09.YOLO\03.pcb_data`，它将不再报错，可以成功添加。以后您每次激活这个环境并启动Label Studio，这个设置都会自动生效。
+
+![image-20250812110035172](https://typora-picture-wang.oss-cn-shanghai.aliyuncs.com/image-20250812110035172.png)
