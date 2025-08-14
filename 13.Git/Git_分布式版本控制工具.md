@@ -94,6 +94,10 @@ git branch -d 分支名 删除分支时，需要做各种检查
 git branch -D 分支名 不做任何检查，强制删除
 ```
 
+远程提交：
+
+![image-20250813090117629](https://typora-picture-wang.oss-cn-shanghai.aliyuncs.com/image-20250813090117629.png)
+
 # Git - 分布式版本控制工具
 
 ## 1、目标
